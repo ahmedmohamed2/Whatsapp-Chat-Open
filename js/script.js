@@ -9,9 +9,23 @@
 
 $("document").ready(function() {
 
+    var input = document.querySelector("#CSTPhone");
+    var iti = window.intlTelInput(input, {
+        utilsScript: "js/utils.js",
+        initialCountry: "auto",
+        geoIpLookup: function (success, failure) {
+            $.get("https://ipinfo.io/json?token=63172e338ca107", function () { }, "jsonp").always(function (resp) {
+            var countryCode = (resp && resp.country) ? resp.country : "US";
+            success(countryCode);
+        });
+        },
+    });
+
+    $("#CSTPhone").focus();
+
     $("#openChatBtn").on("click", function() {
 
-        $CSTPhone = $("#CSTPhone").val();
+        $CSTPhone = iti.getNumber();
 
         if ($CSTPhone.trim() == "") {
             Swal.fire(
@@ -20,7 +34,7 @@ $("document").ready(function() {
                 'error'
             );
         } else {
-            var url = "https://api.whatsapp.com/send?phone=2" + $CSTPhone;
+            var url = "https://api.whatsapp.com/send?phone=" + $CSTPhone.replace("+", "");
             var win = window.open(url, "_blank");
             win.focus();
             $("#CSTPhone").val("")
