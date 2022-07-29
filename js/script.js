@@ -14,7 +14,7 @@ $("document").ready(function() {
         utilsScript: "js/utils.js",
         initialCountry: "auto",
         geoIpLookup: function (success, failure) {
-            $.get("https://ipinfo.io/json?token=63172e338ca107", function () { }, "jsonp").always(function (resp) {
+            $.get("https://ipinfo.io", function () { }, "jsonp").always(function (resp) {
             var countryCode = (resp && resp.country) ? resp.country : "US";
             success(countryCode);
         });
